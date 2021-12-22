@@ -1,0 +1,5 @@
+venv
+private_info.py
+.ipynb_checkpoints
+__pycache__
+data
