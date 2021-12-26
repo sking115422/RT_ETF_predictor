@@ -1,5 +1,5 @@
 venv
-private_info.py
+private_info
 .ipynb_checkpoints
 __pycache__
 data
