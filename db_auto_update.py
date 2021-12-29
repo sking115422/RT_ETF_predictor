@@ -15,18 +15,9 @@ import pytz
 import csv
 import smtplib
 from email.message import EmailMessage
+import traceback
 
 
-#CLASSES FOR CUSTOM ERRORS
-
-
-class FedFundsError(Exception):
-    """Issue with the fed funds db table auto update"""
-    pass
-
-class AssetError(Exception):
-    """Issue with the an assest db table auto update"""
-    pass
 
 
 #CATCHING ANY ERRORS
@@ -141,9 +132,6 @@ try:
             cur.execute(cmd)
             db_con.commit()
             
-        else:
-            
-            raise AssetError
         
         inc = inc + 1
 
@@ -170,8 +158,6 @@ try:
     ff_df.reset_index(drop=True, inplace=True)
     ff_df.rename(columns={0: 'Date', 2: 'DFF'}, inplace=True)
 
-    ff_df.head()
-
 
     # UPDATING FED FUNDS TABLE IN DB
 
@@ -197,13 +183,10 @@ try:
     if ff_db_lr_date == tnx_date and ff_db_lr_val == None:
         pass
     else:
-        if tnx_date == ff_new_date:
-            cur.execute(f"UPDATE fed_funds SET Date = \'{ff_new_date}\' WHERE `index` = {ff_db_lr_index}")
-            cur.execute(f"UPDATE fed_funds SET DFF = \'{ff_new_val}\' WHERE `index` = {ff_db_lr_index}")
-            cur.execute(f"INSERT INTO fed_funds (`Date`, `DFF`) VALUES (\'{current_date}\', NULL);")
-            db_con.commit()
-        else:
-            raise FedFundsError
+        cur.execute(f"UPDATE fed_funds SET Date = \'{ff_new_date}\' WHERE `index` = {ff_db_lr_index}")
+        cur.execute(f"UPDATE fed_funds SET DFF = \'{ff_new_val}\' WHERE `index` = {ff_db_lr_index}")
+        cur.execute(f"INSERT INTO fed_funds (`Date`, `DFF`) VALUES (\'{current_date}\', NULL);")
+        db_con.commit()
         
         
     # EMAIL CONFIMATION OF SUCCESSFUL DATABASE UPDATE 
@@ -225,13 +208,16 @@ try:
         # print ("Something went wrong….",ex)
         pass
 
+
 #IF ERROR OCCURS EMAIL OUT ERROR
 
 
 except Exception as e:
     
+    err = traceback.format_exc()
+    
     msg = EmailMessage()
-    msg.set_content(f'The etf_pred database update has failed for {current_date} ! \n\nError occured: {str(e)} \n\nGo check it out when you get a chance!')
+    msg.set_content(f'The etf_pred database update has failed for {current_date} ! \n\nERROR OCCURED: \n\n{err} \n\nGo check it out when you get a chance!')
     
     msg['Subject'] = f'ETF Predictor Database Update FAILED: {current_date} !'
     msg['From'] = gmail_user
