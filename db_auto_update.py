@@ -220,10 +220,10 @@ try:
         smtp_server.login(gmail_user, gmail_pass)
         smtp_server.send_message(msg)
         smtp_server.close()
-        print ("Email sent successfully!")
+        # print ("Email sent successfully!")
     except Exception as ex:
-        print ("Something went wrong….",ex)
-
+        # print ("Something went wrong….",ex)
+        pass
 
 #IF ERROR OCCURS EMAIL OUT ERROR
 
@@ -242,7 +242,8 @@ except Exception as e:
         smtp_server.login(gmail_user, gmail_pass)
         smtp_server.send_message(msg)
         smtp_server.close()
-        print ("Email sent successfully!")
+        # print ("Email sent successfully!")
     except Exception as ex:
-        print ("Something went wrong….",ex)
+        # print ("Something went wrong….",ex)
+        pass
 
