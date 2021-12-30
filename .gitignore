@@ -3,3 +3,4 @@ private_info
 .ipynb_checkpoints
 __pycache__
 data
+p_data
