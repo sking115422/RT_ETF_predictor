@@ -192,7 +192,7 @@ try:
     # EMAIL CONFIMATION OF SUCCESSFUL DATABASE UPDATE 
     
     msg = EmailMessage()
-    msg.set_content('The etf_pred database has updated successfully for {current_date} !')
+    msg.set_content(f'The etf_pred database has updated successfully for {current_date} !')
     
     msg['Subject'] = f'ETF Predictor Database Updated Succesfully: {current_date} !'
     msg['From'] = gmail_user
